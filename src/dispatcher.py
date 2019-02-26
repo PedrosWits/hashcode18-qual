@@ -39,7 +39,7 @@ def go(params, rides):
         empty_vehicles = empty_vehicles.sort_values('d2ride')
 
         if len(empty_vehicles) == 0:
-            chosen_vehicles.append(-1)
+            chosen_vehicles.append((-1,0))
             logger.warning('Failed to assign a vehicle to ride {} (ts = {}, tf = {})'\
                             .format(ride[0], attr['t_s'], attr['t_f']))
             continue
@@ -47,10 +47,10 @@ def go(params, rides):
         empty_vehicles = empty_vehicles.reset_index(drop = True)
 
         chosen_vehicle = empty_vehicles.loc[0, 'id']
-        chosen_vehicles.append(chosen_vehicle)
 
         vehicle = vehicles.loc[vehicles['id'] == chosen_vehicle].to_dict()
-
+        chosen_vehicles.append((chosen_vehicle,vehicle['t_init'][chosen_vehicle] == attr['t_s']))
+        
         vehicles.loc[vehicles['id'] == chosen_vehicle, 'state'] = vehicle['t_init'][chosen_vehicle] + attr['d']
         vehicles.loc[vehicles['id'] == chosen_vehicle, 'row'] = attr['row_f']
         vehicles.loc[vehicles['id'] == chosen_vehicle, 'column'] = attr['col_f']

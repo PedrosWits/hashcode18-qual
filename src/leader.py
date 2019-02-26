@@ -38,6 +38,11 @@ def read_input(filename):
 
     return params, rides
 
+def count_points(assignments,params):
+    _, _, _, _, bonus, _ = params
+
+    
+
 def main():
 
     if len(sys.argv) < 2:
