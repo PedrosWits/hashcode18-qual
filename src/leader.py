@@ -41,7 +41,14 @@ def read_input(filename):
 def count_points(assignments,params):
     _, _, _, _, bonus, _ = params
 
-
+    p = 0
+    for ride in assignments.iterrows():
+        attr = ride[1]
+        if attr['vehicle'] != -1:
+            p += attr['d']
+            if attr['bonus'] == 1:
+                p += bonus
+    return p
 
 def main():
 
@@ -63,6 +70,9 @@ def main():
     if assignments is None:
         print("Assignments is NULL")
         sys.exit(2)
+
+
+    print(count_points(assignments,params))
 
     # assume assignments is a pandas df
     assignments.to_csv(out_filename, sep = " ", encoding='utf-8')
