@@ -24,17 +24,17 @@ def read_input(filename):
     rides = pd.read_csv(
         filepath_or_buffer = filename,
         sep = ' ',
-        names = ['a', 'b', 'x', 'y', 's', 'f'],
-        skiprows=1,
+        names = ['row_s', 'col_s', 'row_f', 'col_f', 't_s', 't_f'],
+        skiprows=0,
         header = 0,
         dtype =
             {
-                "a": np.uint16,
-                "b": np.uint16,
-                "x": np.uint16,
-                "y": np.uint16,
-                "s": np.uint32,
-                "f": np.uint32})
+                "row_s": np.int32,
+                "col_s": np.int32,
+                "row_f": np.int32,
+                "col_f": np.int32,
+                "t_s": np.int32,
+                "t_f": np.int32})
 
     return params, rides
 
