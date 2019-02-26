@@ -50,7 +50,7 @@ def go(params, rides):
 
         vehicle = vehicles.loc[vehicles['id'] == chosen_vehicle].to_dict()
         chosen_vehicles.append((chosen_vehicle,vehicle['t_init'][chosen_vehicle] == attr['t_s']))
-        
+
         vehicles.loc[vehicles['id'] == chosen_vehicle, 'state'] = vehicle['t_init'][chosen_vehicle] + attr['d']
         vehicles.loc[vehicles['id'] == chosen_vehicle, 'row'] = attr['row_f']
         vehicles.loc[vehicles['id'] == chosen_vehicle, 'column'] = attr['col_f']
@@ -59,4 +59,5 @@ def go(params, rides):
                     .format(chosen_vehicle, vehicle['row'][chosen_vehicle], vehicle['column'][chosen_vehicle], ride[0], attr['t_s'], attr['t_f'], attr['row_s'], attr['col_s'], attr['row_f'], attr['col_f']))
 
 
-    return rides.assign(vehicle = chosen_vehicles)
+    return rides.assign(vehicle = list(map(lambda x: x[0], chosen_vehicles)),
+                        bonus   = list(map(lambda x: x[1], chosen_vehicles)))
