@@ -3,9 +3,9 @@ import pandas as pd
 
 from logger import get_logger
 
-logger = get_logger('dispatcher')
+def go(name, params, rides):
+    logger = get_logger(name)
 
-def go(params, rides):
     R, C, F, N, B, T = params
 
     vehicles = pd.DataFrame({'id' : np.arange(F),

@@ -41,7 +41,7 @@ def read_input(filename):
 def count_points(assignments,params):
     _, _, _, _, bonus, _ = params
 
-    
+
 
 def main():
 
@@ -50,15 +50,15 @@ def main():
         sys.exit(1)
 
     in_filename = sys.argv[1]
+    basename, _ = os.path.splitext(os.path.basename(in_filename))
 
     # read input
     params, rides = read_input(in_filename)
 
     # feed variables to main program
-    assignments = dispatcher.go(params, rides)
+    assignments = dispatcher.go(basename, params, rides)
 
-    pre, _ = os.path.splitext(in_filename)
-    out_filename = pre + ".out"
+    out_filename = os.path.join("./out", basename + ".out")
 
     if assignments is None:
         print("Assignments is NULL")

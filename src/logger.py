@@ -1,9 +1,9 @@
 import os
 import logging as lg
 
-logs_folder = "."
+logs_folder = "logs"
 
-def get_logger(name, path = logs_folder):
+def get_logger(name, log2console = False, path = logs_folder):
 
     logger = lg.getLogger(name)
     logger.setLevel(lg.DEBUG)
@@ -11,9 +11,11 @@ def get_logger(name, path = logs_folder):
     logFormatter = lg.Formatter("%(asctime)s [%(name)-12.12s] [%(levelname)-5.5s]  %(message)s")
 
     if not logger.hasHandlers():
-        consoleHandler = lg.StreamHandler()
-        consoleHandler.setFormatter(logFormatter)
-        consoleHandler.setLevel(lg.INFO)
+        if log2console:
+            consoleHandler = lg.StreamHandler()
+            consoleHandler.setFormatter(logFormatter)
+            consoleHandler.setLevel(lg.INFO)
+            logger.addHandler(consoleHandler)
 
         filename = "{}.log".format(name)
         filepath = os.path.join(path, filename)
@@ -22,7 +24,6 @@ def get_logger(name, path = logs_folder):
         fileHandler.setFormatter(logFormatter)
         fileHandler.setLevel(lg.DEBUG)
 
-        logger.addHandler(consoleHandler)
         logger.addHandler(fileHandler)
 
     return logger
