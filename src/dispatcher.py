@@ -44,17 +44,19 @@ def go(params, rides):
                             .format(ride[0], attr['t_s'], attr['t_f']))
             continue
 
-        chosen_vehicle = empty_vehicles['id'][0]
+        empty_vehicles = empty_vehicles.reset_index(drop = True)
+
+        chosen_vehicle = empty_vehicles.loc[0, 'id']
         chosen_vehicles.append(chosen_vehicle)
 
-        vehicle = vehicles.loc[vehicles['id'] == chosen_vehicle]
+        vehicle = vehicles.loc[vehicles['id'] == chosen_vehicle].to_dict()
 
-        vehicles.loc[vehicles['id'] == chosen_vehicle, 'state'] = vehicle['t_init'] + attr['d']
+        vehicles.loc[vehicles['id'] == chosen_vehicle, 'state'] = vehicle['t_init'][chosen_vehicle] + attr['d']
         vehicles.loc[vehicles['id'] == chosen_vehicle, 'row'] = attr['row_f']
         vehicles.loc[vehicles['id'] == chosen_vehicle, 'column'] = attr['col_f']
 
-        logger.info('Assigning vehicle {} ({}, {}) to ride {} (ts = {}, tf = {})'\
-                    .format(chosen_vehicle, vehicle['row'], vehicle['column'], ride[0], attr['t_s'], attr['t_f']))
+        logger.info('Assigning vehicle {} ({}, {}) to ride {} (ts = {}, tf = {}, start = ({}, {}), finish = ({}, {}))'\
+                    .format(chosen_vehicle, vehicle['row'][chosen_vehicle], vehicle['column'][chosen_vehicle], ride[0], attr['t_s'], attr['t_f'], attr['row_s'], attr['col_s'], attr['row_f'], attr['col_f']))
 
 
     return rides.assign(vehicle = chosen_vehicles)

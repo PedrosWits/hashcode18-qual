@@ -55,12 +55,12 @@ def main():
     pre, _ = os.path.splitext(in_filename)
     out_filename = pre + ".out"
 
-    if not assignments:
+    if assignments is None:
         print("Assignments is NULL")
         sys.exit(2)
 
     # assume assignments is a pandas df
-    assignments.to_csv(file_name, sep = " ", encoding='utf-8')
+    assignments.to_csv(out_filename, sep = " ", encoding='utf-8')
 
 
 if __name__ == "__main__":
