@@ -3,14 +3,15 @@ import sys
 import numpy as np
 import pandas as pd
 
-import dispatcher
+import generic
 
 
 usage = \
 """
-python master.py INPUT
+python leader.py INPUT OUTPUT
 
 INPUT = path to input file
+OUTPUT = path to input file
 """
 
 
@@ -52,25 +53,24 @@ def count_points(assignments,params):
 
 def main():
 
-    if len(sys.argv) < 2:
+    if len(sys.argv) != 3:
         print(usage)
         sys.exit(1)
 
     in_filename = sys.argv[1]
+    out_filename = sys.argv[2]
+
     basename, _ = os.path.splitext(os.path.basename(in_filename))
 
     # read input
     params, rides = read_input(in_filename)
 
     # feed variables to main program
-    assignments = dispatcher.go(basename, params, rides)
-
-    out_filename = os.path.join("./out", basename + ".out")
+    assignments = generic.go(basename, params, rides, dry_run = True)
 
     if assignments is None:
         print("Assignments is NULL")
         sys.exit(2)
-
 
     print(count_points(assignments,params))
 

@@ -3,8 +3,13 @@ import pandas as pd
 
 from logger import get_logger
 
-def go(name, params, rides):
+def go(name, params, rides, log = False, dry_run = False):
     logger = get_logger(name)
+
+    if dry_run:
+        return rides.assign(vehicle = 0,
+                            d = 0,
+                            bonus   = 0)
 
     R, C, F, N, B, T = params
 
@@ -40,8 +45,9 @@ def go(name, params, rides):
 
         if len(empty_vehicles) == 0:
             chosen_vehicles.append((-1,0))
-            logger.warning('Failed to assign a vehicle to ride {} (ts = {}, tf = {})'\
-                            .format(ride[0], attr['t_s'], attr['t_f']))
+            if log:
+                logger.warning('Failed to assign a vehicle to ride {} (ts = {}, tf = {})'\
+                                .format(ride[0], attr['t_s'], attr['t_f']))
             continue
 
         empty_vehicles = empty_vehicles.reset_index(drop = True)
@@ -55,8 +61,9 @@ def go(name, params, rides):
         vehicles.loc[vehicles['id'] == chosen_vehicle, 'row'] = attr['row_f']
         vehicles.loc[vehicles['id'] == chosen_vehicle, 'column'] = attr['col_f']
 
-        logger.info('Assigning vehicle {} ({}, {}) to ride {} (ts = {}, tf = {}, start = ({}, {}), finish = ({}, {}))'\
-                    .format(chosen_vehicle, vehicle['row'][chosen_vehicle], vehicle['column'][chosen_vehicle], ride[0], attr['t_s'], attr['t_f'], attr['row_s'], attr['col_s'], attr['row_f'], attr['col_f']))
+        if log:
+            logger.info('Assigning vehicle {} ({}, {}) to ride {} (ts = {}, tf = {}, start = ({}, {}), finish = ({}, {}))'\
+                        .format(chosen_vehicle, vehicle['row'][chosen_vehicle], vehicle['column'][chosen_vehicle], ride[0], attr['t_s'], attr['t_f'], attr['row_s'], attr['col_s'], attr['row_f'], attr['col_f']))
 
 
     return rides.assign(vehicle = list(map(lambda x: x[0], chosen_vehicles)),
