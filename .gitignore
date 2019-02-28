@@ -103,7 +103,11 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-images/
+in_profile/
+out_profile/
 logs/
 out/
 notebooks/
+
+.DS_Store
+Rplots.pdf

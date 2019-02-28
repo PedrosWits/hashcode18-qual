@@ -79,7 +79,7 @@ df %>%
   xlim(0,params$R) +
   ylim(0,params$C)
 
-image_file = paste("starting", out_file, sep = "")
+image_file = paste(out_file, "_starting", sep = "")
 ggsave(image_file, device = "png")
 
 
@@ -90,5 +90,5 @@ df %>%
   xlim(0,params$R) +
   ylim(0,params$C)
 
-image_file = paste("final_", out_file, sep = "")
+image_file = paste(out_file, "_final", sep = "")
 ggsave(image_file, device = "png")
