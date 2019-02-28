@@ -72,6 +72,7 @@ cat(paste("Max score: ", prettyNum(count_max_score(df, params$B), big.mark = ","
 # CHANGE THIS
 # ================================================
 
+# Plot of trip starting points
 df %>%
   select(row_s, col_s) %>%
   ggplot() +
@@ -83,6 +84,7 @@ image_file = paste(out_file, "_starting", sep = "")
 ggsave(image_file, device = "png")
 
 
+# Plot of trip ending points
 df %>%
   select(row_f, col_f) %>%
   ggplot() +
@@ -92,3 +94,31 @@ df %>%
 
 image_file = paste(out_file, "_final", sep = "")
 ggsave(image_file, device = "png")
+
+
+# Number of starting times per time bin
+events_start = df %>%
+  mutate(Period = findInterval(t_s, seq(1, params$T, params$T/100))) %>%
+  group_by(Period) %>%
+  summarise(Events = n()) %>%
+  mutate(Type = "Start")
+
+events_finish = df %>%
+  mutate(Period = findInterval(t_f, seq(1, params$T, params$T/100))) %>%
+  group_by(Period) %>%
+  summarise(Events = n()) %>%
+  mutate(Type = "Finish")
+
+bind_rows(events_start, events_finish) %>%
+  ggplot() +
+  geom_line(aes(x = Period, y = Events, color = Type))
+  
+
+# Number of ending times per time bin
+df %>%
+  mutate(TimePeriod = findInterval(t_f, seq(1, params$T, params$T/100))) %>%
+  group_by(TimePeriod) %>%
+  summarise(Events = n()) %>%
+  ggplot() +
+  geom_point(aes(x = TimePeriod, y = Events), color = "red")
+  
